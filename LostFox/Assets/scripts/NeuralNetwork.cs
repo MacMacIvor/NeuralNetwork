@@ -147,7 +147,7 @@ public class NeuralNetwork : MonoBehaviour
                 {
                     for (int l = 0; l < pairing[i - 1].Length; l++)
                     {
-                        value = 0.0f;
+                        value = 0.35f;
 
                         for (int m = 0; m < pairing[i - 1][l].Length; m++)
                         {
@@ -178,7 +178,7 @@ public class NeuralNetwork : MonoBehaviour
                 {
                     for (int j = 0; j < nodes[i].Length; j++)
                     {
-                        value = 0.0f;
+                        value = 0.35f;
                         for (int k = 0; k < nodes[i - 1].Length; k++)
                         {
                             bool wasInList = false;
@@ -210,7 +210,7 @@ public class NeuralNetwork : MonoBehaviour
                 {
                     for (int l = 0; l < pairing[i - 1].Length; l++)
                     {
-                        value = 0.0f;
+                        value = 0.35f;
 
                         for (int m = 0; m < pairing[i - 1][l].Length; m++)
                         {
@@ -228,7 +228,7 @@ public class NeuralNetwork : MonoBehaviour
                 {
                     for (int j = 0; j < nodes[i].Length; j++)
                     {
-                        value = 0.0f;
+                        value = 0.35f;
                         for (int k = 0; k < nodes[i - 1].Length; k++)
                         {
                             //Adds all the weights of connections in this layer with the previous layer
@@ -242,9 +242,6 @@ public class NeuralNetwork : MonoBehaviour
 
 
 
-            //Hyperbolic tangent activation
-            nodes[i][j] = (float)(Math.Tanh(value));
-
 
         }
         //Returns the nodes
@@ -252,7 +249,7 @@ public class NeuralNetwork : MonoBehaviour
 
     }
 
-    public void mutate(float agressivity)
+    public void mutate(float agressivity, float activation)
     {
         //Go through every single node
         for (int i = 0; i < weights.Length; i++)
@@ -262,18 +259,21 @@ public class NeuralNetwork : MonoBehaviour
                 //Go through every single connection that node has in the previous layer
                 for (int k = 0; k < weights[i][j].Length; k++)
                 {
-                    float weight = weights[i][j][k];
+                    if (UnityEngine.Random.Range(0.0f, 1.0f) > activation)
+                    {
+                        float weight = weights[i][j][k];
 
-                    //Mutate the weight
-                    float randomNumber = (float)UnityEngine.Random.Range(1.0f - (agressivity/100), 1.0f + (agressivity/100.0f));
-                    weight *= randomNumber;
+                        //Mutate the weight
+                        float randomNumber = (float)UnityEngine.Random.Range(1.0f - (agressivity / 100), 1.0f + (agressivity / 100.0f));
+                        weight *= randomNumber;
 
-                    if (weight > 1.0f)
-                        weight = 1.0f;
-                    else if (weight < -1.0f)
-                        weight = -1.0f;
+                        if (weight > 1.0f)
+                            weight = 1.0f;
+                        else if (weight < -1.0f)
+                            weight = -1.0f;
 
-                    weights[i][j][k] = weight;
+                        weights[i][j][k] = weight;
+                    }
                 }
             }
         }

@@ -52,12 +52,86 @@ public class behavior : MonoBehaviour
     //NeuralNetwork
 
     public NeuralNetwork network;
+    /*
                                         //input nodes have angles, either its danger or not, isGrounded, current xyz velocity, isInvincible, lives, distance to next checkpoint
-    public int[] layers = new int[4] { 39, 14, 11, 4 };
+    int[] layers = new int[4] { 38, 14, 14, 4 };
+                                                            //Example of how it would be formatted
+    int[][] restriction = new int[][] { new int[] { 5/*Min*, 9/*Max* }, new int[] { 3, 9 }, new int[] { 3, 9 } };
+    bool[] restrictionBool = new bool[] { false, false, false};
+
+    //These need to follow the layers -1 (horizontally)
+            //1 = Layer     2 = Just a new pair     3 = the Actual pair (Can be more than 2)
+    int[][][] pairing = new int[][][] { 
+        new int[][] { 
+            new int[] { 0, 1 }, 
+            new int[] { 2, 3 },
+            new int[] { 4, 1 },
+            new int[] { 6, 1 },
+            new int[] { 8, 1 },
+            new int[] { 10, 1 },
+            new int[] { 12, 1 },
+            new int[] { 14, 1 },
+            new int[] { 16, 1 },
+            new int[] { 18, 1 },
+            new int[] { 20, 1 },
+            new int[] { 0, 1 },
+        }, 
+        new int[][] { 
+            new int[] { 0, 0 }, 
+            new int[] { 0, 0 } 
+        } 
+    };
+    bool[] pairingBool = new bool[] { true, false, false };
+
+    */
+
+                                        //input nodes have angles, either its danger or not, isGrounded, current xyz velocity, isInvincible, lives, distance to next checkpoint
+    int[] layers = new int[6] { 39, 39, 39, 39, 39, 4 };
+                                                            //Example of how it would be formatted
+    int[][] restriction = new int[][] { new int[] { 5/*Min*/, 9/*Max*/ }, new int[] { 3, 9 }, new int[] { 3, 9 } };
+    bool[] restrictionBool = new bool[] { false, false, false, false, false, false };
+
+    //These need to follow the layers -1 (horizontally)
+            //1 = Layer     2 = Just a new pair     3 = the Actual pair (Can be more than 2)
+    int[][][] pairing = new int[][][] { 
+        new int[][] { 
+            new int[] { 0, 1 }, 
+            new int[] { 2, 3 },
+            new int[] { 4, 1 },
+            new int[] { 6, 1 },
+            new int[] { 8, 1 },
+            new int[] { 10, 1 },
+            new int[] { 12, 1 },
+            new int[] { 14, 1 },
+            new int[] { 16, 1 },
+            new int[] { 18, 1 },
+            new int[] { 20, 1 },
+            new int[] { 0, 1 },
+        }, 
+        new int[][] { 
+            new int[] { 0, 0 }, 
+            new int[] { 0, 0 } 
+        },
+        new int[][] {
+            new int[] { 0, 0 },
+            new int[] { 0, 0 }
+        },
+        new int[][] {
+            new int[] { 0, 0 },
+            new int[] { 0, 0 }
+        },
+        new int[][] {
+            new int[] { 0, 0 },
+            new int[] { 0, 0 }
+        }
+    };
+    bool[] pairingBool = new bool[] { false, false, false, false, false, false };
+
+
                                         //Possible outputs are - sprint, move left, move right, jump
     public float[] listOfAnglesForSenses = new float[] { PI / 6, PI / 4, PI / 2, PI / 2, 2 * PI / 3, 3 * PI / 4, 5 * PI / 6, PI, 7 * PI / 6, 5 * PI / 4, 4 * PI / 3, 3 * PI / 2, 5 * PI / 3, 7 * PI / 4, 11 * PI / 6, 2 * PI };
     public float activationValue = 0.7f;
-
+    
     private int checkpointsReached = 0;
     public List<GameObject> CheckPointList = new List<GameObject>();
     public float timeForCheckPoints = 999.9f;
@@ -96,10 +170,11 @@ public class behavior : MonoBehaviour
             //Why do it like this?????????
             //Just pass in the list nooooo???
             //I did this during the night while tired need to be changed at some point
-            float[] input = new float[] { dAD[0][0], dAD[0][1], dAD[1][0], dAD[1][1], dAD[2][0], dAD[3][0], dAD[3][1], dAD[4][0], dAD[4][1], dAD[5][0], dAD[5][1], dAD[6][0], dAD[6][1], dAD[7][0], dAD[7][1], dAD[8][0], dAD[8][1],
-            dAD[9][0], dAD[9][1],dAD[10][0],dAD[10][1],dAD[11][0],dAD[11][1],dAD[12][0],dAD[12][1],dAD[13][0],dAD[13][1],dAD[14][0],dAD[14][1],dAD[15][0],dAD[15][1],
-            (isGrounded == true ? 1 : 0), this.transform.gameObject.GetComponent<Rigidbody>().velocity.x, this.transform.gameObject.GetComponent<Rigidbody>().velocity.y, totTime, health, getDistanceToNextCheckPoint()[0] };
-            float[] output = network.feedForward(input);
+            float[] input = new float[39] { dAD[0][0], dAD[0][1], dAD[1][0], dAD[1][1], dAD[2][0], dAD[2][1], dAD[3][0], dAD[3][1], dAD[4][0], dAD[4][1], dAD[5][0], dAD[5][1], dAD[6][0], dAD[6][1], dAD[7][0], dAD[7][1],
+                dAD[8][0], dAD[8][1], dAD[9][0], dAD[9][1],dAD[10][0],dAD[10][1],dAD[11][0],dAD[11][1],dAD[12][0],dAD[12][1],dAD[13][0],dAD[13][1],dAD[14][0],dAD[14][1],dAD[15][0],dAD[15][1],
+            (isGrounded == true ? 1 : 0), this.transform.gameObject.GetComponent<Rigidbody>().velocity.x, this.transform.gameObject.GetComponent<Rigidbody>().velocity.y, totTime, health, getDistanceToNextCheckPoint()[0], checkpointsReached };
+            //float[] output = network.feedForward(input);
+            float[] output = network.feedForwardCustom(input, restriction, restrictionBool, pairing, pairingBool);
 
 
             //Output action
@@ -206,6 +281,10 @@ public class behavior : MonoBehaviour
                 createDust(0);
             }
         }
+        else
+        {
+            gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
     }
 
 
@@ -239,6 +318,7 @@ public class behavior : MonoBehaviour
                 }
                 break;
         }
+        
     }
 
 
@@ -279,10 +359,10 @@ public class behavior : MonoBehaviour
             {
                 health--;
                 activateFlash();
-                if (health == 0)
+                if (health <= 0)
                 {
                     //this.gameObject.SetActive(false);
-                    transform.position = new Vector3(0, 9.86f, 0);
+                    //transform.position = new Vector3(0, 9.86f, 0);
                     gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0, gameObject.GetComponent<Rigidbody>().velocity.y, gameObject.GetComponent<Rigidbody>().velocity.z);
                     //health = 3;
                     foxHealth[1].transform.position -= Vector3.up * 100;
@@ -344,9 +424,9 @@ public class behavior : MonoBehaviour
         this.network.copyWeights (weights);
     }
 
-    public void mutateNetwork(float mutationAggression)
+    public void mutateNetwork(float mutationAggression, float mutationActivation)
     {
-        network.mutate(mutationAggression);
+        network.mutate(mutationAggression, mutationActivation);
     }
 
     public float[] senseDistance(float angle) //Shoots a ray in a direction to let the ai know how far until an object in that area, and if it's danger

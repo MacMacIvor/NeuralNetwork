@@ -2609,7 +2609,6 @@ MonoBehaviour:
   dust: {fileID: 738227331}
   foxsss: {fileID: 0}
   network: {fileID: 0}
-  layers: 270000000e0000000b00000004000000
   listOfAnglesForSenses:
   - 0.5235988
   - 0.7853982
@@ -2633,8 +2632,9 @@ MonoBehaviour:
   - {fileID: 1423587555}
   - {fileID: 1231270557}
   - {fileID: 1956687712}
-  timeForCheckPoints: []
+  timeForCheckPoints: 999.9
   timerObject: {fileID: 1832978136}
+  checkPointObject: {fileID: 1033250986}
 --- !u!54 &538646999
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3211,9 +3211,10 @@ MonoBehaviour:
   timerHolder: {fileID: 1832978136}
   checkpointHolder: {fileID: 1033250986}
   populationContainer: []
-  populationCount: 200
-  timeToWaitConst: 20
-  mutationAggression: 80
+  populationCount: 100
+  timeToWaitConst: 15
+  mutationAggression: 5
+  mutationActivation: 0.9
   populationString: {fileID: 1049739484}
 --- !u!4 &691005031
 Transform:

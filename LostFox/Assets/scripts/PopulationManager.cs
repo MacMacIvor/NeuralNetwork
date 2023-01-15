@@ -18,6 +18,7 @@ public class PopulationManager : MonoBehaviour
     public float timeToWaitConst = 5.0f;
 
     public float mutationAggression = 0.1f;
+    public float mutationActivation = 0.9f;
 
     private int populationNumber = 1;
 
@@ -92,7 +93,7 @@ public class PopulationManager : MonoBehaviour
                         indexOfBestFox = i;
                         currentBest = checking;
                     }
-                    if (currentBest[1] == checking[1] && currentBest[0] > checking[0])
+                    if (currentBest[1] == checking[1] && currentBest[0] > checking[0] && currentBest[1] != checkpointHolder.transform.childCount - 1)
                     {
 
                         indexOfBestFox = i;
@@ -100,7 +101,9 @@ public class PopulationManager : MonoBehaviour
                     }
                     else if (currentBest[1] == (checkpointHolder.transform.childCount - 1) && checking[1] == (checkpointHolder.transform.childCount - 1))
                     {
-                        
+                        float one = populationContainer[indexOfBestFox].GetComponent<behavior>().getTimes();
+                        float two = populationContainer[i].GetComponent<behavior>().getTimes();
+
                         if (populationContainer[indexOfBestFox].GetComponent<behavior>().getTimes() > populationContainer[i].GetComponent<behavior>().getTimes())
                         {
                             indexOfBestFox = i;
@@ -146,7 +149,7 @@ public class PopulationManager : MonoBehaviour
                     populationContainer[i].transform.position = initPos;
                     populationContainer[i].transform.gameObject.GetComponent<Rigidbody>().velocity = Vector2.zero;
                     populationContainer[i].GetComponent<behavior>().copyNetWork(populationContainer[indexOfBestFox].GetComponent<behavior>().getWeights());
-                    populationContainer[i].GetComponent<behavior>().mutateNetwork(mutationAggression);
+                    populationContainer[i].GetComponent<behavior>().mutateNetwork(mutationAggression, mutationActivation);
                     populationContainer[i].GetComponent<behavior>().resetCheckPoints();
                 }
             }
@@ -172,7 +175,7 @@ public class PopulationManager : MonoBehaviour
                     populationContainer[i].transform.position = initPos;
                     populationContainer[i].transform.gameObject.GetComponent<Rigidbody>().velocity = Vector2.zero;
                     populationContainer[i].GetComponent<behavior>().copyNetWork(populationContainer[indexOfBestFox].GetComponent<behavior>().getWeights());
-                    populationContainer[i].GetComponent<behavior>().mutateNetwork(mutationAggression);
+                    populationContainer[i].GetComponent<behavior>().mutateNetwork(mutationAggression, mutationActivation);
                     populationContainer[i].GetComponent<behavior>().resetCheckPoints();
                 }
             }
@@ -183,7 +186,7 @@ public class PopulationManager : MonoBehaviour
                 newObject.transform.position = initPos;
                 populationContainer.Add(newObject);
                 populationContainer[i].GetComponent<behavior>().copyNetWork(populationContainer[indexOfBestFox].GetComponent<behavior>().getWeights());
-                populationContainer[i].GetComponent<behavior>().mutateNetwork(mutationAggression);
+                populationContainer[i].GetComponent<behavior>().mutateNetwork(mutationAggression, mutationActivation);
             }
             populationPrefab.gameObject.SetActive(false);
         }
